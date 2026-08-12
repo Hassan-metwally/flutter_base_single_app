@@ -46,7 +46,7 @@
 //   Widget build(BuildContext context) {
 //     return Column(
 //       children: [
-//         AppSvgIcon(path: AppIcons.location, size: 40),
+//         AppSvgIcon(path: "AppIcons.location", size: 40),
 //         const SizedBox(height: 24),
 //         Text(
 //           appLocalizer.locateYourself,

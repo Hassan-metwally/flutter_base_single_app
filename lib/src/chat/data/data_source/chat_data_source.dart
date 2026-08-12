@@ -29,7 +29,7 @@ class ChatDataSourceImp implements ChatDataSource {
   @override
   Future<List<ApiChatMessageModel>> getMessages(GetChatMessagesParams params) async {
     try {
-      final Map<String, dynamic> response = await _dioHelper.get(url: ApiConstants.apiUrl(_getMessagesUrl(params.chatId)));
+      final Map<String, dynamic> response = await _dioHelper.get(url: ApiConstants.addToApiUrlPath(_getMessagesUrl(params.chatId)));
       final List messagesJson = response["data"]['chat']['messages'] ?? [];
       final List<ApiChatMessageModel> messages = messagesJson.map((e) => ApiChatMessageModel.fromJson(e)).toList();
       return messages;
@@ -47,7 +47,10 @@ class ChatDataSourceImp implements ChatDataSource {
           ..sendTimeout = const Duration(minutes: 7)
           ..receiveTimeout = const Duration(minutes: 7),
       );
-      final Map<String, dynamic> response = await newDioObj.post(url: ApiConstants.apiUrl(params.getRequetUrl), body: params.toMap);
+      final Map<String, dynamic> response = await newDioObj.post(
+        url: ApiConstants.addToApiUrlPath(params.getRequetUrl),
+        body: await params.toMap,
+      );
       return ApiChatMessageModel.fromJson(response["data"]["message"]);
     } catch (e) {
       rethrow;
@@ -57,7 +60,7 @@ class ChatDataSourceImp implements ChatDataSource {
   @override
   Future<IChatDetailsEntity> getChatInformation(IChatPageInput params) async {
     try {
-      final Map<String, dynamic> response = await _dioHelper.get(url: ApiConstants.apiUrl(params.getChatDetailsApiRequestPath));
+      final Map<String, dynamic> response = await _dioHelper.get(url: ApiConstants.addToApiUrlPath(params.getChatDetailsApiRequestPath));
       return IChatDetailsEntity.fromJson(response["data"]['chat']);
     } catch (e) {
       rethrow;

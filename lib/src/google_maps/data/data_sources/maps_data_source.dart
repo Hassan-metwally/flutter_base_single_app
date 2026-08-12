@@ -18,7 +18,7 @@ const String _KGoogleMapsApiBaseUrl = "https://maps.googleapis.com/maps/api";
 const String _KPlacesAutoCompleteCollection = "/place/autocomplete/json";
 const String _KGeoCodingCollection = "/geocode/json";
 const String _KPlaceDetailsCollection = "/place/details/json";
-String get _upateLocationUrl => ApiConstants.apiUrl("auth/update-location");
+String get _upateLocationUrl => ApiConstants.addToApiUrlPath("auth/update-location");
 
 abstract class MapsDataSource {
   Future<List<ApiMapPlaceSuggestionModel>> getSearchSuggestions(String searchText);

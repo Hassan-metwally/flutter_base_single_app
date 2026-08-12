@@ -18,18 +18,20 @@ class SendContactUsMessageUseCase extends IUseCase<void, SendContactUsMessagePar
 class SendContactUsMessageParams {
   final String name;
   final String email;
+  final String countryCode;
   final String phone;
   final ContactUsMessageType type;
   final String message;
 
-  SendContactUsMessageParams({required this.name, required this.email, required this.message, required this.phone, required this.type});
+  SendContactUsMessageParams({required this.name, required this.email, required this.message, required this.phone, required this.type, required this.countryCode});
 
   Map<String, dynamic> get toMap => {
     "name": name,
     "email": email,
-    "type": type.apiValue,
+    "message_type": type.apiValue,
     "message": message,
-    "mobile": (phone.isNotEmpty && !phone.startsWith('0')) ? '0$phone' : phone,
+    "country_code": countryCode,
+    "phone": (phone.isNotEmpty && !phone.startsWith('0')) ? '0$phone' : phone,
   };
 }
 

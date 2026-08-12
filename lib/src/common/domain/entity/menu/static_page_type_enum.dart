@@ -19,11 +19,11 @@ enum StaticPageTypeEnum {
   String get key {
     switch (this) {
       case StaticPageTypeEnum.aboutUs:
-        return "about-app";
+        return "about-us";
       case StaticPageTypeEnum.termsAndConditions:
-        return "terms-and-conditions";
+        return "terms";
       case StaticPageTypeEnum.privacyPolicy:
-        return "privacy-policy";
+        return "privacy";
     }
   }
 }

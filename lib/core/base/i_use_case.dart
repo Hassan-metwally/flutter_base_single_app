@@ -9,7 +9,7 @@ abstract class IUseCase<T, Params> {
 // This will be used by the code calling the use case whenever the use case
 // doesn't accept any parameters.
 class NoParams extends Equatable {
-  Map<String, dynamic> get toMap => {};
+  Future<Map<String, dynamic>> get toMap async => {};
 
   @override
   List<Object?> get props => <Object?>[];

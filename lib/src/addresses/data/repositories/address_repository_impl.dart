@@ -18,7 +18,7 @@ class AddressRepositoryImpl extends AddressRepository {
   @override
   DomainServiceType<LocationEntity> addLocation(AddressParams params) async {
     return await failureCollect(() async {
-      final response = await _dioHelper.post(url: ApiConstants.apiUrl('addresses'), body: params.toMap());
+      final response = await _dioHelper.post(url: ApiConstants.addToApiUrlPath('addresses'), body: params.toMap());
       final location = ApiLocationModel.fromJson(response['data']['address']).map;
       return Right(location);
     });
@@ -27,7 +27,7 @@ class AddressRepositoryImpl extends AddressRepository {
   @override
   DomainServiceType<void> deleteLocation(DeleteLocationParams params) async {
     return await failureCollect(() async {
-      await _dioHelper.delete(url: ApiConstants.apiUrl('addresses/${params.id}'));
+      await _dioHelper.delete(url: ApiConstants.addToApiUrlPath('addresses/${params.id}'));
       return const Right(null);
     });
   }
@@ -35,7 +35,7 @@ class AddressRepositoryImpl extends AddressRepository {
   @override
   DomainServiceType<PaginatedData<LocationEntity>> getAddresses(GetAddressesParams params) async {
     return await failureCollect(() async {
-      final response = await _dioHelper.get(url: ApiConstants.apiUrl('addresses'), queryParameters: params.toMap());
+      final response = await _dioHelper.get(url: ApiConstants.addToApiUrlPath('addresses'), queryParameters: params.toMap());
       final apiPaginatedData = ApiPaginatedData.fromJson(
         response['data'],
         getData: (data) => data.map((element) => ApiLocationModel.fromJson(element)).toList(),
@@ -47,7 +47,7 @@ class AddressRepositoryImpl extends AddressRepository {
 
   @override
   DomainServiceType<LocationEntity> updateAdressInAdressList(AddressParams params) async {
-    final response = await _dioHelper.post(url: ApiConstants.apiUrl('addresses/${params.id}'), body: params.toMap());
+    final response = await _dioHelper.post(url: ApiConstants.addToApiUrlPath('addresses/${params.id}'), body: params.toMap());
     final location = ApiLocationModel.fromJson(response['data']['address']).map;
     return Right(location);
   }

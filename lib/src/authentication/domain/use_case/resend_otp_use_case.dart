@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/core.dart';
 import '../repository/authentication_repository.dart';
+import 'verify_otp_use_case.dart';
 
 @Injectable()
 class ResendOtpUseCase extends IUseCase<void, ResendOtpParams> {
@@ -17,10 +18,17 @@ class ResendOtpUseCase extends IUseCase<void, ResendOtpParams> {
 }
 
 class ResendOtpParams extends NoParams {
+  final OtpScreenCaseEnum verifyCase;
+  final String countryCode;
   final String phone;
-
-  ResendOtpParams({required this.phone});
+  ResendOtpParams({required this.phone, required this.countryCode, required this.verifyCase});
 
   @override
-  Map<String, dynamic> get toMap => {'mobile': phone};
+  Future<Map<String, dynamic>> get toMap async => {
+    "purpose": verifyCase.value,
+    "country_code": countryCode,
+    "phone": phone,
+    "fcm_token": "test_tokentest_tokentest_tokentest_tokentest_tokentest_tokentest_tokentest_tokentest_token",
+    // "fcm_token": await FirebaseHelper.getDeviceFcmToken(),
+  };
 }

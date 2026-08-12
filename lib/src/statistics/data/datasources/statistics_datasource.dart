@@ -16,7 +16,7 @@ class StatisticsDatasourceImpl extends StatisticsDatasource {
   @override
   Future<ApiStatisticsModel> getStatistics() async {
     try {
-      final response = await _dioHelper.get(url: ApiConstants.apiUrl('/statistics'));
+      final response = await _dioHelper.get(url: ApiConstants.addToApiUrlPath('/statistics'));
       final data = ApiStatisticsModel.fromJson(response['data']['data']);
       return data;
     } catch (_) {

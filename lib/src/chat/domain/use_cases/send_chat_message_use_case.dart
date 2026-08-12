@@ -35,7 +35,7 @@ class SendChatMessageParams extends NoParams {
   String get getRequetUrl => input.getSendMessageApiRequestPath;
 
   @override
-  Map<String, dynamic> get toMap => {
+  Future<Map<String, dynamic>> get toMap async => {
     "chat_id": chatId,
     "message": message,
     "type": messageType.jsonValue,

@@ -12,18 +12,18 @@
 // import '../maps_main_page.dart';
 // import 'manage_location_permission_bottom_sheet.dart';
 
-// class PickLocationWidget extends StatefulWidget {
-//   const PickLocationWidget({super.key, required this.addressColor, required this.iconColor, required this.message});
+// class PickLocationOnStartWidget extends StatefulWidget {
+//   const PickLocationOnStartWidget({super.key, required this.addressColor, required this.iconColor, required this.message});
 
 //   final Color iconColor;
 //   final Color addressColor;
 //   final String message;
 
 //   @override
-//   State<PickLocationWidget> createState() => _PickLocationWidgetState();
+//   State<PickLocationOnStartWidget> createState() => _PickLocationOnStartWidgetState();
 // }
 
-// class _PickLocationWidgetState extends State<PickLocationWidget> {
+// class _PickLocationOnStartWidgetState extends State<PickLocationOnStartWidget> {
 //   final UpdateUserLocationUseCase _updateLocationUseCase = injector<UpdateUserLocationUseCase>();
 
 //   @override
@@ -65,7 +65,7 @@
 //                       },
 //                       child: Padding(
 //                         padding: const EdgeInsetsDirectional.only(end: 4),
-//                         child: AppSvgIcon(path: AppIcons.location4, color: widget.iconColor),
+//                         child: AppSvgIcon(path: "AppIcons.location4", color: widget.iconColor),
 //                       ),
 //                     ),
 //                     Expanded(
@@ -115,7 +115,7 @@
 //                   },
 //                   child: Row(
 //                     children: [
-//                       AppSvgIcon(path: AppIcons.location4, color: widget.iconColor, height: 16, width: 16),
+//                       AppSvgIcon(path: "AppIcons.location4", color: widget.iconColor, height: 16, width: 16),
 //                       const SizedBox(width: 4),
 //                       Expanded(
 //                         child: Column(

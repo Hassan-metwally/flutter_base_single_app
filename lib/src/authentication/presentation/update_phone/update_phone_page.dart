@@ -49,7 +49,7 @@ class _UpdatePhonePageState extends State<UpdatePhonePage> {
   void _onSuccess() {
     OtpPage.show(
       context,
-      arguments: OtpScreenArguments(phone: _phoneController.text, caseEnum: OtpScreenCaseEnum.updatePhone),
+      arguments: OtpScreenArguments(countryCode: "+966", phone: _phoneController.text, verifyCase: OtpScreenCaseEnum.changePhone),
     );
   }
 

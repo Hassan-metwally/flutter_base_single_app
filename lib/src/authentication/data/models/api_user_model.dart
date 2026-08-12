@@ -15,7 +15,7 @@ class ApiUserModel {
   factory ApiUserModel.fromJson(Map<String, dynamic> json) => ApiUserModel(
     id: json["id"] ?? 0,
     name: json["name"] ?? '',
-    mobile: json["mobile"] ?? '',
+    mobile: json["phone"] ?? '',
     avatar: json["avatar"] != null ? AttachmentEntity.fromNetwork(url: json["avatar"]) : const AttachmentEntity.empty(),
     isVerified: json["is_verified"],
   );

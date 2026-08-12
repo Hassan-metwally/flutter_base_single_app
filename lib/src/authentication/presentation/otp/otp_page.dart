@@ -193,7 +193,7 @@ class _OtpPageBodyState extends State<_OtpPageBody> {
     final bool isValid = _formKey.currentState?.validate() ?? false;
     if (isValid) {
       final isVerifyStateSuccess = OtpCubit.of(context).state.verifyState.isSuccess;
-      if (widget.arguments.caseEnum == OtpScreenCaseEnum.updatePhone && isVerifyStateSuccess) {
+      if (widget.arguments.verifyCase == OtpScreenCaseEnum.changePhone && isVerifyStateSuccess) {
         OtpCubit.of(context).updatePhone();
       } else {
         OtpCubit.of(context).verify(_otpController.text);
@@ -202,18 +202,8 @@ class _OtpPageBodyState extends State<_OtpPageBody> {
   }
 
   void _onOtpVerifySuccess() {
-    switch (widget.arguments.caseEnum) {
+    switch (widget.arguments.verifyCase) {
       case OtpScreenCaseEnum.register:
-        //  switch (EnvironmentsConfig.appEnvironment) {
-        //     case AppEnvironmentEnum.user:
-        //       break;
-        //     case AppEnvironmentEnum.provider:
-        //       if (CurrentProviderAppRole.isClient) {
-        //         break;
-        //       } else if (CurrentProviderAppRole.isProvider) {
-        //         break;
-        //       }
-        //   }
         AppAuthenticationBloc.of(context).add(const AuthenticatedEvent());
         Navigator.popUntil(context, (route) => route.isFirst);
         break;
@@ -222,7 +212,7 @@ class _OtpPageBodyState extends State<_OtpPageBody> {
         AppAuthenticationBloc.of(context).add(const AuthenticatedEvent());
         Navigator.popUntil(context, (route) => route.isFirst);
         break;
-      case OtpScreenCaseEnum.updatePhone:
+      case OtpScreenCaseEnum.changePhone:
         AppToasts.success(context, message: appLocalizer.phoneUpdateSuccessMessage);
         Navigator.popUntil(context, (route) => route.isFirst);
         AppAuthenticationBloc.of(context).add(const LoggedOutEvent());

@@ -81,6 +81,7 @@ class __ContactUsBodyState extends State<_ContactUsBody> {
     if (isValidForm && messageType != null) {
       ContactUsCubit.of(context).sendMessage(
         SendContactUsMessageParams(
+          countryCode: "+966",
           email: _emailController.text,
           name: _nameController.text,
           phone: _phoneController.text,

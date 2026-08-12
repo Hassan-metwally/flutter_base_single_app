@@ -3,11 +3,11 @@ part of core;
 class ApiConstants {
   const ApiConstants._();
 
-  // static const String apiBaseUrl = "https://backend.azahmni.moltaqadev.com";
-  static const String apiBaseUrl = "https://backend.azhmny.com/";
+  static const String apiBaseUrl = "https://api-zahab.dev-moltaqa.cloud";
+  // static const String apiBaseUrl = "https://api-zahab-moltaqa.cloud";
 
-  static String apiUrl(String url) {
-    return "/client-api/v1/$url";
+  static String addToApiUrlPath(String url) {
+    return "/api/v1/client/$url";
   }
 
   static String apiKey =

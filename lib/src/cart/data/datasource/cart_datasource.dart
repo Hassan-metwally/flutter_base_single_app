@@ -21,7 +21,7 @@ class CartDatasourceImpl extends CartDatasource {
   @override
   Future<ApiCartModel> getCartItems(NoParams params) async {
     try {
-      final response = await _dioHelper.get(url: ApiConstants.apiUrl('carts/show-cart'));
+      final response = await _dioHelper.get(url: ApiConstants.addToApiUrlPath('carts/show-cart'));
       return ApiCartModel.fromJson(response['data']['cart'] ?? {});
     } catch (e) {
       rethrow;
@@ -32,11 +32,11 @@ class CartDatasourceImpl extends CartDatasource {
   Future<ApiCartModel> upsertCartItem(AddToCartParams params) async {
     try {
       if (params.upsertType == UpsertTypeEnum.add) {
-        final response = await _dioHelper.post(url: ApiConstants.apiUrl('carts/add-to-cart'), body: params.toMap);
+        final response = await _dioHelper.post(url: ApiConstants.addToApiUrlPath('carts/add-to-cart'), body: params.toMap);
         return ApiCartModel.fromJson(response['data']['cart'] ?? {});
       } else {
         final response = await _dioHelper.post(
-          url: ApiConstants.apiUrl('carts/${params.productId}/update-cart-product-quantity'),
+          url: ApiConstants.addToApiUrlPath('carts/${params.productId}/update-cart-product-quantity'),
           body: params.toMap,
         );
         return ApiCartModel.fromJson(response['data']['cart'] ?? {});
@@ -49,7 +49,7 @@ class CartDatasourceImpl extends CartDatasource {
   @override
   Future<ApiCartModel> deleteItemFromCart(int itemId) async {
     try {
-      final response = await _dioHelper.post(url: ApiConstants.apiUrl('carts/remove-from-cart'), body: {'product_id': itemId});
+      final response = await _dioHelper.post(url: ApiConstants.addToApiUrlPath('carts/remove-from-cart'), body: {'product_id': itemId});
       return ApiCartModel.fromJson(response['data']?['cart'] ?? {});
     } catch (e) {
       rethrow;
@@ -59,7 +59,7 @@ class CartDatasourceImpl extends CartDatasource {
   @override
   Future<ApiCartModel> updateCartDeliveryFees(UpdateCartDeliveryFeesParams params) async {
     try {
-      final response = await _dioHelper.post(url: ApiConstants.apiUrl('carts/update-delivery-fees'), body: params.toMap);
+      final response = await _dioHelper.post(url: ApiConstants.addToApiUrlPath('carts/update-delivery-fees'), body: params.toMap);
       return ApiCartModel.fromJson(response['data']['cart']);
     } catch (e) {
       rethrow;
@@ -69,7 +69,7 @@ class CartDatasourceImpl extends CartDatasource {
   @override
   Future<String> checkoutCart(NoParams params) async {
     try {
-      final response = await _dioHelper.post(url: ApiConstants.apiUrl('carts/checkout'));
+      final response = await _dioHelper.post(url: ApiConstants.addToApiUrlPath('carts/checkout'));
       final message = response['message'] ?? response['data']?['message'];
       return message?.toString() ?? '';
     } catch (e) {

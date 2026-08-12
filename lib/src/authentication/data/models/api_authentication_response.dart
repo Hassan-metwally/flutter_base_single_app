@@ -8,7 +8,7 @@ class ApiLoggedUserResponse {
   const ApiLoggedUserResponse({required this.accessToken, required this.user});
 
   factory ApiLoggedUserResponse.fromJson(Map<String, dynamic> json) =>
-      ApiLoggedUserResponse(accessToken: json["access_token"] ?? '', user: ApiUserModel.fromJson(json));
+      ApiLoggedUserResponse(accessToken: json["access_token"] ?? '', user: ApiUserModel.fromJson(json["user"]));
 
   TokenModel get getTokenForSingleSession {
     if (accessToken.isEmpty) {

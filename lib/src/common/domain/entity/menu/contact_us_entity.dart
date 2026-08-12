@@ -44,20 +44,20 @@ class ContactUsEntity extends Equatable {
   List<Object?> get props => [x, tiktok, instagram, facebook, snapchat, youtube, email, whatsapp, mobiles, playProvider, appProvider];
 
   factory ContactUsEntity.fromJson(Map<String, dynamic> json) {
-    final whatsapp = json['social']['whatsapp'];
+    final whatsapp = json['whatsapp_number'];
     return ContactUsEntity(
       email: json['email'] ?? '',
-      x: json['social']['x'] ?? '',
-      tiktok: json['social']['tiktok'] ?? '',
-      instagram: json['social']['instagram'] ?? '',
-      facebook: json['social']['facebook'] ?? '',
-      snapchat: json['social']['snapchat'] ?? '',
-      youtube: json['social']['youtube'] ?? '',
-      appProvider: json['social']['app_provider'] ?? '',
-      playProvider: json['social']['play_provider'] ?? '',
-      mobiles: json['mobiles'] != null ? List<String>.from(json['mobiles']) : [],
+      x: json['x_link'] ?? '',
+      tiktok: json['tiktok_link'] ?? '',
+      instagram: json['instagram_link'] ?? '',
+      facebook: json['facebook_link'] ?? '',
+      snapchat: json['snapchat_link'] ?? '',
+      youtube: json['youtube_link'] ?? '',
+      appProvider: json['app_provider'] ?? '',
+      playProvider: json['play_provider'] ?? '',
+      mobiles: json['contact_numbers'] != null ? List<String>.from(json['contact_numbers']) : [],
       whatsapp: whatsapp is List
-          ? List<String>.from(json['social']['whatsapp'])
+          ? List<String>.from(json['whatsapp'])
           : whatsapp is String
           ? [whatsapp]
           : [],

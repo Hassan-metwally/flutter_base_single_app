@@ -7,29 +7,19 @@ import '../../domain/entity/menu/contact_us_entity.dart';
 import '../../domain/entity/menu/static_page_type_enum.dart';
 import '../../domain/repository/menu_common_repository.dart';
 import '../../domain/use_cases/menu/send_contact_us_message_use_case.dart';
+import '../datasources/menu_common_datasource.dart';
 
 @Injectable(as: MenuCommonRepository)
 class MenuCommonRepositoryImp implements MenuCommonRepository {
-  final DioHelper _apiHelper;
+  final MenuCommonDatasource _dataSource;
   final SecureStorageRepository _secureStorage;
 
-  MenuCommonRepositoryImp(this._apiHelper, this._secureStorage);
+  MenuCommonRepositoryImp(this._dataSource, this._secureStorage);
 
   @override
   DomainServiceType<String> getStaticPageData(StaticPageTypeEnum type) async {
     return await failureCollect<String>(() async {
-      final result = await _apiHelper.get(url: "/shared-api/v1/static-pages/${type.key}");
-      final String data;
-      switch (type) {
-        case StaticPageTypeEnum.aboutUs:
-          data = result['data'] ?? '';
-        case StaticPageTypeEnum.termsAndConditions:
-          data = result['data'] ?? '';
-
-        case StaticPageTypeEnum.privacyPolicy:
-          data = result['data'] ?? '';
-      }
-
+      final data = await _dataSource.getStaticPageData(type);
       return Right(data);
     });
   }
@@ -37,8 +27,7 @@ class MenuCommonRepositoryImp implements MenuCommonRepository {
   @override
   DomainServiceType<ContactUsEntity> getContactUsData() async {
     return await failureCollect<ContactUsEntity>(() async {
-      final result = await _apiHelper.get(url: "/shared-api/v1/static-pages/app-contacts");
-      final data = result['data'];
+      final data = await _dataSource.getContactUsData();
       return Right(ContactUsEntity.fromJson(data));
     });
   }
@@ -46,7 +35,7 @@ class MenuCommonRepositoryImp implements MenuCommonRepository {
   @override
   DomainServiceType<void> sendContactUsMessage(SendContactUsMessageParams params) async {
     return await failureCollect<void>(() async {
-      await _apiHelper.post(url: "/shared-api/v1/contacts", body: params.toMap);
+      await _dataSource.sendContactUsMessage(params);
       return const Right(null);
     });
   }
@@ -54,9 +43,7 @@ class MenuCommonRepositoryImp implements MenuCommonRepository {
   // @override
   // DomainServiceType<List<FaqEntity>> getFaqList() async {
   //   return await failureCollect<List<FaqEntity>>(() async {
-  //     final req = await _apiHelper.get(url: "static-pages/common-questions");
-  //     final reqData = req['data'] as List;
-  //     final List<FaqEntity> data = reqData.map((e) => FaqEntity.fromJson(e)).toList();
+  //     final data = await _dataSource.getFaqList();
   //     return Right(data);
   //   });
   // }
@@ -64,9 +51,7 @@ class MenuCommonRepositoryImp implements MenuCommonRepository {
   @override
   DomainServiceType<void> toggleNotificationEnable() async {
     return await failureCollect<void>(() async {
-      final result = await _apiHelper.post(url: "auth/toggle-notification");
-      final userJson = result['data']['user'];
-      final user = ApiUserModel.fromJson(userJson);
+      final user = await _dataSource.toggleNotificationEnable();
       await _secureStorage.setCachedUser(user.map.mapToCacheEntity);
       return const Right(null);
     });

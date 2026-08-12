@@ -22,5 +22,5 @@ class GetChatMessagesParams extends NoParams {
   GetChatMessagesParams({required this.chatId, required this.pageKey});
 
   @override
-  Map<String, dynamic> get toMap => {"page": pageKey};
+  Future<Map<String, dynamic>> get toMap async => {"page": pageKey};
 }

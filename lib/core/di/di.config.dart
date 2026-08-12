@@ -85,6 +85,8 @@ import '../../src/chats_inbox/domain/repositories/chats_inbox_repository.dart'
 import '../../src/chats_inbox/domain/usecases/get_chats_inbox_usecase.dart'
     as _i388;
 import '../../src/chats_inbox/presentation/chats_inbox_cubit.dart' as _i659;
+import '../../src/common/data/datasources/common_datasource.dart' as _i1065;
+import '../../src/common/data/datasources/menu_common_datasource.dart' as _i758;
 import '../../src/common/data/repository/common_repository_imp.dart' as _i867;
 import '../../src/common/data/repository/menu_common_repository_imp.dart'
     as _i294;
@@ -209,9 +211,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i203.LanguageCacheDateSourceImp(),
     );
     gh.factory<_i351.DioHelper>(() => _i351.DioHelper(dio: gh<_i361.Dio>()));
-    gh.factory<_i92.CommonRepository>(
-      () => _i867.CommonRepositoryImp(gh<_i351.DioHelper>()),
-    );
     gh.factory<_i995.RatingDatasource>(
       () => _i995.RatingDatasourceImpl(gh<_i351.DioHelper>()),
     );
@@ -223,6 +222,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i768.AddressRepository>(
       () => _i711.AddressRepositoryImpl(gh<_i351.DioHelper>()),
+    );
+    gh.factory<_i1065.CommonDatasource>(
+      () => _i1065.CommonDatasourceImpl(gh<_i351.DioHelper>()),
     );
     gh.factory<_i984.ThemeRepository>(() => _i715.ThemeRepositoryImp());
     gh.factory<_i401.MapsDataSource>(
@@ -251,20 +253,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i726.ReadNotificationUseCase>(
       () => _i726.ReadNotificationUseCase(gh<_i209.NotificationRepository>()),
     );
-    gh.factory<_i725.GetBanksUseCase>(
-      () => _i725.GetBanksUseCase(gh<_i92.CommonRepository>()),
-    );
-    gh.factory<_i212.GetCitiesUseCase>(
-      () => _i212.GetCitiesUseCase(gh<_i92.CommonRepository>()),
-    );
-    gh.factory<_i459.GetServicesUseCase>(
-      () => _i459.GetServicesUseCase(gh<_i92.CommonRepository>()),
-    );
-    gh.factory<_i1006.ChangeLanguageUseCase>(
-      () => _i1006.ChangeLanguageUseCase(gh<_i92.CommonRepository>()),
-    );
     gh.factory<_i309.ChatsInboxDatasource>(
       () => _i309.ChatsInboxDatasourceImpl(gh<_i351.DioHelper>()),
+    );
+    gh.factory<_i92.CommonRepository>(
+      () => _i867.CommonRepositoryImp(gh<_i1065.CommonDatasource>()),
     );
     gh.factory<_i339.AddLocationUseCase>(
       () => _i339.AddLocationUseCase(gh<_i768.AddressRepository>()),
@@ -289,6 +282,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i339.AddLocationUseCase>(),
         gh<_i803.UpdateAddressInAddressListuseCase>(),
       ),
+    );
+    gh.factory<_i758.MenuCommonDatasource>(
+      () => _i758.MenuCommonDatasourceImpl(gh<_i351.DioHelper>()),
     );
     gh.factory<_i482.RatingRepository>(
       () => _i665.RatingRepositoryImpl(gh<_i995.RatingDatasource>()),
@@ -344,12 +340,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i351.SetTokenUseCase>(
       () => _i351.SetTokenUseCase(gh<_i351.SecureStorageRepository>()),
     );
-    gh.factory<_i646.MenuCommonRepository>(
-      () => _i294.MenuCommonRepositoryImp(
-        gh<_i351.DioHelper>(),
-        gh<_i351.SecureStorageRepository>(),
-      ),
-    );
     gh.factory<_i532.GetMapLocationAddressUseCase>(
       () => _i532.GetMapLocationAddressUseCase(gh<_i410.MapsRepository>()),
     );
@@ -367,20 +357,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i34.ChatsInboxRepository>(
       () => _i399.ChatsInboxRepositoryImpl(gh<_i309.ChatsInboxDatasource>()),
-    );
-    gh.factory<_i268.GetContactUsDataUseCase>(
-      () => _i268.GetContactUsDataUseCase(gh<_i646.MenuCommonRepository>()),
-    );
-    gh.factory<_i573.GetStaticDataUseCase>(
-      () => _i573.GetStaticDataUseCase(gh<_i646.MenuCommonRepository>()),
-    );
-    gh.factory<_i45.SendContactUsMessageUseCase>(
-      () => _i45.SendContactUsMessageUseCase(gh<_i646.MenuCommonRepository>()),
-    );
-    gh.factory<_i1015.ToggleEnableNotificationUseCase>(
-      () => _i1015.ToggleEnableNotificationUseCase(
-        gh<_i646.MenuCommonRepository>(),
-      ),
     );
     gh.factory<_i300.AuthenticationRepository>(
       () => _i469.AuthenticationRepositoryImp(
@@ -429,6 +405,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i751.WithdrawBalanceUseCase>(
       () => _i751.WithdrawBalanceUseCase(gh<_i46.WalletRepository>()),
     );
+    gh.factory<_i725.GetBanksUseCase>(
+      () => _i725.GetBanksUseCase(gh<_i92.CommonRepository>()),
+    );
+    gh.factory<_i212.GetCitiesUseCase>(
+      () => _i212.GetCitiesUseCase(gh<_i92.CommonRepository>()),
+    );
+    gh.factory<_i459.GetServicesUseCase>(
+      () => _i459.GetServicesUseCase(gh<_i92.CommonRepository>()),
+    );
+    gh.factory<_i1006.ChangeLanguageUseCase>(
+      () => _i1006.ChangeLanguageUseCase(gh<_i92.CommonRepository>()),
+    );
     gh.factory<_i303.AddRateUsecase>(
       () => _i303.AddRateUsecase(gh<_i482.RatingRepository>()),
     );
@@ -461,6 +449,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i656.ClientPersonalProfileCubit(
         gh<_i582.GetProfileUseCase>(),
         gh<_i87.UpdateProfileUseCase>(),
+      ),
+    );
+    gh.factory<_i646.MenuCommonRepository>(
+      () => _i294.MenuCommonRepositoryImp(
+        gh<_i758.MenuCommonDatasource>(),
+        gh<_i351.SecureStorageRepository>(),
       ),
     );
     gh.factory<_i351.ClearLanguageCacheUseCase>(
@@ -524,6 +518,20 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i158.RatingsCubit>(
       () => _i158.RatingsCubit(gh<_i1024.GetRatingsUsecase>()),
+    );
+    gh.factory<_i268.GetContactUsDataUseCase>(
+      () => _i268.GetContactUsDataUseCase(gh<_i646.MenuCommonRepository>()),
+    );
+    gh.factory<_i573.GetStaticDataUseCase>(
+      () => _i573.GetStaticDataUseCase(gh<_i646.MenuCommonRepository>()),
+    );
+    gh.factory<_i45.SendContactUsMessageUseCase>(
+      () => _i45.SendContactUsMessageUseCase(gh<_i646.MenuCommonRepository>()),
+    );
+    gh.factory<_i1015.ToggleEnableNotificationUseCase>(
+      () => _i1015.ToggleEnableNotificationUseCase(
+        gh<_i646.MenuCommonRepository>(),
+      ),
     );
     gh.factory<_i295.AddRateCubit>(
       () => _i295.AddRateCubit(gh<_i303.AddRateUsecase>()),

@@ -69,7 +69,7 @@ class {{feature_type_pascal}}DatasourceImpl extends {{feature_type_pascal}}Datas
   @override
   Future<{{api_model_type_pascal}}Model> {{add_camel}}{{entity_name.pascalCase()}}({{upsert_pascal}}{{entity_name.pascalCase()}}Params params) async {
     try {
-      final response = await _dioHelper.post(url: "ApiConstants.appRoleApi('/{{entity_name.snakeCase()}}')", body: params.toMap);
+      final response = await _dioHelper.post(url: "ApiConstants.addToApiUrlPath('/{{entity_name.snakeCase()}}')", body: params.toMap);
       return {{api_model_type_pascal}}Model.fromJson(response['data']);
     } catch (_) {
       rethrow;
@@ -81,7 +81,7 @@ class {{feature_type_pascal}}DatasourceImpl extends {{feature_type_pascal}}Datas
   @override
   Future<{{api_model_type_pascal}}Model> {{add_camel}}{{entity_name.pascalCase()}}({{upsert_pascal}}{{entity_name.pascalCase()}}Params params) async {
     try {
-      final response = await _dioHelper.post(url: "ApiConstants.appRoleApi('/{{entity_name.snakeCase()}}')", body: params.toMap);
+      final response = await _dioHelper.post(url: "ApiConstants.addToApiUrlPath('/{{entity_name.snakeCase()}}')", body: params.toMap);
       return {{api_model_type_pascal}}Model.fromJson(response['data']);
     } catch (_) {
       rethrow;
@@ -94,7 +94,7 @@ class {{feature_type_pascal}}DatasourceImpl extends {{feature_type_pascal}}Datas
   @override
   Future<String> {{delete_camel}}{{entity_name.pascalCase()}}(int id) async {
     try {
-      final response = await _dioHelper.delete(url: "ApiConstants.appRoleApi('/{{entity_name.snakeCase()}}/$id')");
+      final response = await _dioHelper.delete(url: "ApiConstants.addToApiUrlPath('/{{entity_name.snakeCase()}}/$id')");
       return response['message'];
     } catch (_) {
       rethrow;
@@ -106,7 +106,7 @@ class {{feature_type_pascal}}DatasourceImpl extends {{feature_type_pascal}}Datas
   @override
   Future<{{api_model_type_pascal}}DetailsModel> {{show_camel}}{{entity_name.pascalCase()}}Details(int id) async {
     try {
-      final response = await _dioHelper.get(url: "ApiConstants.appRoleApi('/{{entity_name.snakeCase()}}/$id')");
+      final response = await _dioHelper.get(url: "ApiConstants.addToApiUrlPath('/{{entity_name.snakeCase()}}/$id')");
       return {{api_model_type_pascal}}DetailsModel.fromJson(response['data']);
     } catch (_) {
       rethrow;
@@ -118,7 +118,7 @@ class {{feature_type_pascal}}DatasourceImpl extends {{feature_type_pascal}}Datas
   @override
   Future<ApiPaginatedData<{{api_model_type_pascal}}Model>> {{get_camel}}{{feature_name.pascalCase()}}({{get_pascal}}{{feature_name.pascalCase()}}Params params) async {
     try {
-      final response = await _dioHelper.get(url: "ApiConstants.appRoleApi('/{{entity_name.snakeCase()}}')", queryParameters: params.toMap);
+      final response = await _dioHelper.get(url: "ApiConstants.addToApiUrlPath('/{{entity_name.snakeCase()}}')", queryParameters: params.toMap);
       final data = ApiPaginatedData<{{api_model_type_pascal}}Model>.fromJson(
         response['data'],
         getData: (dataList) => dataList.map((e) => {{api_model_type_pascal}}Model.fromJson(e)).toList(),
@@ -135,7 +135,7 @@ class {{feature_type_pascal}}DatasourceImpl extends {{feature_type_pascal}}Datas
   Future<List<{{api_model_type_pascal}}Model>> {{get_list_without_pagination_camel}}{{feature_name.pascalCase()}}(NoParams params) async {
     try {
       final response = await _dioHelper.get(
-        url: "ApiConstants.appRoleApi('/{{entity_name.snakeCase()}}')",
+        url: "ApiConstants.addToApiUrlPath('/{{entity_name.snakeCase()}}')",
         queryParameters: {'page': 0, 'limit': 0},
       );
       final rawList = (response['data']?['data'] as List<dynamic>? ?? const <dynamic>[]);
@@ -152,7 +152,7 @@ class {{feature_type_pascal}}DatasourceImpl extends {{feature_type_pascal}}Datas
   @override
   Future<{{api_model_type_pascal}}Model> {{update_camel}}{{entity_name.pascalCase()}}({{upsert_pascal}}{{entity_name.pascalCase()}}Params params) async {
     try {
-      final response = await _dioHelper.post(url: "ApiConstants.appRoleApi('/reps/${params.id}')", body: params.toMap);
+      final response = await _dioHelper.post(url: "ApiConstants.addToApiUrlPath('/reps/${params.id}')", body: params.toMap);
       return {{api_model_type_pascal}}Model.fromJson(response['data']);
     } catch (_) {
       rethrow;
@@ -164,7 +164,7 @@ class {{feature_type_pascal}}DatasourceImpl extends {{feature_type_pascal}}Datas
   @override
   Future<{{api_model_type_pascal}}Model> {{update_camel}}{{entity_name.pascalCase()}}({{upsert_pascal}}{{entity_name.pascalCase()}}Params params) async {
     try {
-      final response = await _dioHelper.post(url: "ApiConstants.appRoleApi('/reps/${params.id}')", body: params.toMap);
+      final response = await _dioHelper.post(url: "ApiConstants.addToApiUrlPath('/reps/${params.id}')", body: params.toMap);
       return {{api_model_type_pascal}}Model.fromJson(response['data']);
     } catch (_) {
       rethrow;
@@ -179,16 +179,16 @@ class {{feature_type_pascal}}DatasourceImpl extends {{feature_type_pascal}}Datas
     try {
       switch (params.toggleAction) {
         case {{entity_name.pascalCase()}}StatusToggleActionEnum.makeAsSold:
-          final response = await _dioHelper.post(url: "ApiConstants.appRoleApi('/ads/mark-as-sold/${params.id}')");
+          final response = await _dioHelper.post(url: "ApiConstants.addToApiUrlPath('/ads/mark-as-sold/${params.id}')");
           return response['message'];
         case {{entity_name.pascalCase()}}StatusToggleActionEnum.pay:
-          final response = await _dioHelper.post(url: "ApiConstants.appRoleApi('/ads/pay/${params.id}', body: params.toMap)");
+          final response = await _dioHelper.post(url: "ApiConstants.addToApiUrlPath('/ads/pay/${params.id}', body: params.toMap)");
           return response['message'];
         case {{entity_name.pascalCase()}}StatusToggleActionEnum.cancel:
-          final response = await _dioHelper.post(url: "ApiConstants.appRoleApi('/ads/expire/${params.id}')");
+          final response = await _dioHelper.post(url: "ApiConstants.addToApiUrlPath('/ads/expire/${params.id}')");
           return response['message'];
         case {{entity_name.pascalCase()}}StatusToggleActionEnum.favorite:
-          final response = await _dioHelper.post(url: "ApiConstants.appRoleApi('/ads/${params.id}/favorite')");
+          final response = await _dioHelper.post(url: "ApiConstants.addToApiUrlPath('/ads/${params.id}/favorite')");
           return response['message'];
       }
     } catch (_) {

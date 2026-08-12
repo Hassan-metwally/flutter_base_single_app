@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/core.dart';
-import '../../../notifications/helpers/firebase/firebase_helper.dart';
 import '../entities/user_entity.dart';
 import '../repository/authentication_repository.dart';
 
@@ -20,17 +19,18 @@ class LogInUseCase extends IUseCase<UserEntity, LoginParams> {
 }
 
 class LoginParams extends Equatable {
+  final String countryCode;
   final String phone;
 
-  const LoginParams({required this.phone});
+  const LoginParams({required this.countryCode, required this.phone});
 
   Future<Map<String, dynamic>> get toMap async {
     return {
-      "device_token": await FirebaseHelper.getDeviceFcmToken(),
-      "mobile": (phone.isNotEmpty && !phone.startsWith('0')) ? '0$phone' : phone,
+      "country_code": countryCode,
+      "phone": (phone.isNotEmpty && !phone.startsWith('0')) ? '0$phone' : phone,
     };
   }
 
   @override
-  List<Object?> get props => [phone];
+  List<Object?> get props => [countryCode, phone];
 }
