@@ -23,7 +23,14 @@ class SendContactUsMessageParams {
   final ContactUsMessageType type;
   final String message;
 
-  SendContactUsMessageParams({required this.name, required this.email, required this.message, required this.phone, required this.type, required this.countryCode});
+  SendContactUsMessageParams({
+    required this.name,
+    required this.email,
+    required this.message,
+    required this.phone,
+    required this.type,
+    required this.countryCode,
+  });
 
   Map<String, dynamic> get toMap => {
     "name": name,

@@ -16,13 +16,7 @@ class RiyalPriceText extends StatelessWidget {
   final TextStyle? currencyTextStyle;
   final TextAlign textAlign;
 
-  const RiyalPriceText({
-    super.key,
-    required this.price,
-    this.priceTextStyle,
-    this.currencyTextStyle,
-    this.textAlign = TextAlign.start,
-  });
+  const RiyalPriceText({super.key, required this.price, this.priceTextStyle, this.currencyTextStyle, this.textAlign = TextAlign.start});
 
   bool checkIfPriceOnly() {
     final regx = RegExp(r'(\d+\.\d+)');
@@ -43,29 +37,18 @@ class RiyalPriceText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currencyStyle = currencyTextStyle?.copyWith(
-          fontFamily: saudiRiyalSymbolIconData.fontFamily,
-        ) ??
-        priceTextStyle?.copyWith(
-          fontFamily: saudiRiyalSymbolIconData.fontFamily,
-        ) ??
-        TextStyle(
-          fontFamily: saudiRiyalSymbolIconData.fontFamily,
-        );
+    final currencyStyle =
+        currencyTextStyle?.copyWith(fontFamily: saudiRiyalSymbolIconData.fontFamily) ??
+        priceTextStyle?.copyWith(fontFamily: saudiRiyalSymbolIconData.fontFamily) ??
+        TextStyle(fontFamily: saudiRiyalSymbolIconData.fontFamily);
 
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(
-            text: '${getPrice()} ',
-            style: priceTextStyle,
-          ),
+          TextSpan(text: '${getPrice()} ', style: priceTextStyle),
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
-            child: Text(
-              String.fromCharCode(saudiRiyalSymbolIconData.codePoint),
-              style: currencyStyle,
-            ),
+            child: Text(String.fromCharCode(saudiRiyalSymbolIconData.codePoint), style: currencyStyle),
           ),
         ],
       ),
@@ -76,9 +59,6 @@ class RiyalPriceText extends StatelessWidget {
 
 extension RiyalPrice on Text {
   Widget withRiyalPrice() {
-    return RiyalPriceText(
-        price: data.toString(),
-        priceTextStyle: style,
-        currencyTextStyle: style);
+    return RiyalPriceText(price: data.toString(), priceTextStyle: style, currencyTextStyle: style);
   }
 }

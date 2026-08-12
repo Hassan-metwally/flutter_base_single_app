@@ -29,10 +29,7 @@ class CommonDatasourceImpl extends CommonDatasource {
   @override
   Future<List<ApiCityModel>> getCities() async {
     try {
-      final response = await _dioHelper.get(
-        url: '/shared-api/v1/cities',
-        queryParameters: {'page': '0', 'limit': '0'},
-      );
+      final response = await _dioHelper.get(url: '/shared-api/v1/cities', queryParameters: {'page': '0', 'limit': '0'});
       final List data = List.from(response['data']);
       return data.map((e) => ApiCityModel.fromJson(e)).toList();
     } catch (_) {
@@ -43,10 +40,7 @@ class CommonDatasourceImpl extends CommonDatasource {
   @override
   Future<List<ApiCommonModel>> getServices() async {
     try {
-      final response = await _dioHelper.get(
-        url: '/shared-api/v1/services',
-        queryParameters: {'page': '0', 'limit': '0'},
-      );
+      final response = await _dioHelper.get(url: '/shared-api/v1/services', queryParameters: {'page': '0', 'limit': '0'});
       final List data = List.from(response['data']);
       return data.map((e) => ApiCommonModel.fromJson(e)).toList();
     } catch (_) {
@@ -57,10 +51,7 @@ class CommonDatasourceImpl extends CommonDatasource {
   @override
   Future<List<ApiCommonModel>> getBanks() async {
     try {
-      final response = await _dioHelper.get(
-        url: '/shared-api/v1/banks',
-        queryParameters: {'page': '0', 'limit': '0'},
-      );
+      final response = await _dioHelper.get(url: '/shared-api/v1/banks', queryParameters: {'page': '0', 'limit': '0'});
       final List data = List.from(response['data']);
       return data.map((e) => ApiCommonModel.fromJson(e)).toList();
     } catch (_) {

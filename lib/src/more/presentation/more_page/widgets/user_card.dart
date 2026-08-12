@@ -1,5 +1,10 @@
 part of '../more_page.dart';
 
+String _formatSaudiMobile(String mobile) {
+  final local = mobile.startsWith('0') ? mobile.substring(1) : mobile;
+  return '+966$local';
+}
+
 class _UseCard extends StatelessWidget {
   const _UseCard();
 
@@ -31,7 +36,7 @@ class _LoggedClientCard extends StatelessWidget {
         child: Row(
           spacing: 10,
           children: [
-             () {
+            () {
               if (user.avatar.isNotEmpty) {
                 return AppImage.circle(
                   path: user.avatar,
@@ -52,15 +57,32 @@ class _LoggedClientCard extends StatelessWidget {
             }(),
             Expanded(
               child: Column(
-                spacing: 4,
+                spacing: 2,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(user.name, style: TextStyles.light14, maxLines: 1, overflow: TextOverflow.ellipsis),
                   Text(
-                   AppLanguageCubit.of(context).isArabic ? "966${user.mobile.substring(1)}+" : "+966${user.mobile.substring(1)}",
-                    style: TextStyles.light12.copyWith(color: AppColors.primary800),
+                    user.name,
+                    style: TextStyles.medium16.copyWith(color: AppColors.black900),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 4,
+                    children: [
+                      AppSvgIcon(path: ""),
+                      Flexible(
+                        child: Text(
+                          _formatSaudiMobile(user.mobile),
+                          textDirection: TextDirection.ltr,
+                          style: TextStyles.medium14.copyWith(color: AppColors.grey, height: 1.6),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
