@@ -214,8 +214,8 @@ class _OtpPageBodyState extends State<_OtpPageBody> {
         break;
       case OtpScreenCaseEnum.changePhone:
         AppToasts.success(context, message: appLocalizer.phoneUpdateSuccessMessage);
+        AppAuthenticationBloc.of(context).add(const AuthenticatedEvent());
         Navigator.popUntil(context, (route) => route.isFirst);
-        AppAuthenticationBloc.of(context).add(const LoggedOutEvent());
     }
   }
 

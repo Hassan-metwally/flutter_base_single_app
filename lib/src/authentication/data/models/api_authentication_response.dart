@@ -17,10 +17,14 @@ class ApiLoggedUserResponse {
     return TokenModel.forSingleSession(token: accessToken);
   }
 
-  TokenModel get getAsValidTokenEntity {
+  TokenModel get getAsValidTokenModel {
     if (accessToken.isEmpty) {
       throw "ApiLoggedUserResponse accessToken is requried and cant be empty";
     }
     return TokenModel(token: accessToken);
+  }
+
+  ApiUserModel get getUserModel {
+    return user;
   }
 }
