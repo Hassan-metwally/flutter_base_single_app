@@ -50,4 +50,13 @@ enum TransactionTypeEnum {
         return AppColors.error;
     }
   }
+
+    String get effect {
+    switch (this) {
+      case TransactionTypeEnum.deposit:
+        return '+';
+      case TransactionTypeEnum.withdrawal:
+        return '-';
+    }
+  }
 }

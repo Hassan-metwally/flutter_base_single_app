@@ -25,10 +25,9 @@ class TransactionCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.black50),
-            child: AppSvgIcon(path: "", size: 20),
+            child: AppSvgIcon(path: transaction.type.icon, size: 20, color: transaction.type.color),
           ),
           Expanded(
-            flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 4,
@@ -43,14 +42,17 @@ class TransactionCard extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(
-            child: Text(
-              transaction.amount,
-              style: TextStyles.semiBold12.copyWith(color: transaction.type.color, height: 1.8),
-              textAlign: TextAlign.end,
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 2,
+            children: [
+              Text(
+                '${transaction.type.effect} ${transaction.amount}',
+                style: TextStyles.medium18.copyWith(color: transaction.type.color, height: 1),
+              ),
+              AppSvgIcon(path: "AppIcons.sar1", size: 12, color: transaction.type.color),
+            ],
           ),
-          AppSvgIcon(path: transaction.type == TransactionTypeEnum.deposit ? "" : "", size: 20, color: transaction.type.color),
         ],
       ),
     );
