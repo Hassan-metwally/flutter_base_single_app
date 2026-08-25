@@ -51,7 +51,7 @@ enum TransactionTypeEnum {
     }
   }
 
-    String get effect {
+  String get effect {
     switch (this) {
       case TransactionTypeEnum.deposit:
         return '+';

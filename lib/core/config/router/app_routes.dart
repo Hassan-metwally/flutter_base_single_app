@@ -2,9 +2,9 @@ class AppRoutes {
   const AppRoutes._();
   static const appHome = '/app';
 
-  static const clientPersonalProfile = '/clientPersonalProfilePage';
-  static const clientLoginPage = '/clientLoginPage';
-  static const clientRegisterPage = '/clientRegisterPage';
+  static const personalProfile = '/personalProfilePage';
+  static const loginPage = '/loginPage';
+  static const registerPage = '/registerPage';
   static const clientWalletPage = '/clientWalletPage';
   static const cartPage = '/CartPage';
   static const myAddressesPage = '/MyAddressesPage';

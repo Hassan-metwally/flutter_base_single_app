@@ -32,15 +32,12 @@ class AppRoutesGenerator {
       case AppRoutes.appHome:
         page = const AppBuilderScreen();
 
-      case AppRoutes.clientLoginPage:
+      case AppRoutes.loginPage:
         page = BlocProvider(create: (context) => LoginCubit(), child: const LoginPage());
-      case AppRoutes.clientRegisterPage:
+      case AppRoutes.registerPage:
         page = BlocProvider(create: (context) => RegisterCubit(), child: const RegisterPage());
-      case AppRoutes.clientPersonalProfile:
-        page = BlocProvider(
-          create: (context) => injector<ClientPersonalProfileCubit>()..getData(),
-          child: const ClientPersonalProfilePage(),
-        );
+      case AppRoutes.personalProfile:
+        page = BlocProvider(create: (context) => injector<PersonalProfileCubit>()..getData(), child: const PersonalProfilePage());
       case AppRoutes.clientWalletPage:
         page = const ClientWalletPage();
       case AppRoutes.cartPage:

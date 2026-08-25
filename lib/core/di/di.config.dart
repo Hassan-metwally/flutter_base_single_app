@@ -445,8 +445,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i87.UpdateProfileUseCase>(
       () => _i87.UpdateProfileUseCase(gh<_i931.MoreRepository>()),
     );
-    gh.factory<_i656.ClientPersonalProfileCubit>(
-      () => _i656.ClientPersonalProfileCubit(
+    gh.factory<_i656.PersonalProfileCubit>(
+      () => _i656.PersonalProfileCubit(
         gh<_i582.GetProfileUseCase>(),
         gh<_i87.UpdateProfileUseCase>(),
       ),

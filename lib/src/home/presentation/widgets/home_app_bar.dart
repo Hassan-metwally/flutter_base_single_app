@@ -25,7 +25,7 @@ class _HomeAppBarState extends State<_HomeAppBar> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      AppRouter.pushNamed(AppRoutes.clientPersonalProfile);
+                      AppRouter.pushNamed(AppRoutes.personalProfile);
                     },
                     child: Row(
                       children: [

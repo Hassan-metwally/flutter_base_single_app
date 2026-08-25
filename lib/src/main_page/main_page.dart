@@ -12,21 +12,21 @@ import '../../material/offstage.dart';
 import '../notifications/helpers/firebase/firebase_helper.dart';
 import '../home/presentation/home_page.dart';
 import '../more/presentation/more_page/more_page.dart';
-import 'models/client_main_page_tabs_enum.dart';
-import 'observer/client_main_page_observer.dart';
+import 'models/main_page_tabs_enum.dart';
+import 'observer/main_page_observer.dart';
 
-part 'widgets/client_bottom_navigation_bar.dart';
+part 'widgets/bottom_navigation_bar.dart';
 
-class ClientMainPage extends StatefulWidget {
-  const ClientMainPage({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<ClientMainPage> createState() => _ClientMainPageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _ClientMainPageState extends State<ClientMainPage> with ClientMainPageObserverMixin {
-  ClientMainPageTabsEnum _currentTabEnum = ClientMainPageTabsEnum.home;
-  final List<ClientMainPageTabsEnum> _loadedPages = [ClientMainPageTabsEnum.home];
+class _MainPageState extends State<MainPage> with MainPageObserverMixin {
+  MainPageTabsEnum _currentTabEnum = MainPageTabsEnum.home;
+  final List<MainPageTabsEnum> _loadedPages = [MainPageTabsEnum.home];
 
   void _addUnAuthenticatedListener() {
     UnAuthenticatedInterceptor.instance.addListener(() {
@@ -34,7 +34,7 @@ class _ClientMainPageState extends State<ClientMainPage> with ClientMainPageObse
     });
   }
 
-  void _onCurrentTapChanged(ClientMainPageTabsEnum currentTap) {
+  void _onCurrentTapChanged(MainPageTabsEnum currentTap) {
     if (!_loadedPages.contains(currentTap)) {
       _loadedPages.add(currentTap);
     }
@@ -44,8 +44,8 @@ class _ClientMainPageState extends State<ClientMainPage> with ClientMainPageObse
   }
 
   void _onPop() {
-    if (_currentTabEnum != ClientMainPageTabsEnum.home) {
-      _onCurrentTapChanged(ClientMainPageTabsEnum.home);
+    if (_currentTabEnum != MainPageTabsEnum.home) {
+      _onCurrentTapChanged(MainPageTabsEnum.home);
     } else {
       SystemNavigator.pop();
     }
@@ -83,16 +83,16 @@ class _ClientMainPageState extends State<ClientMainPage> with ClientMainPageObse
         child: IndexedStack(
           index: _currentTabEnum.index,
           children: [
-            OffStage(isActive: _currentTabEnum == ClientMainPageTabsEnum.home, child: HomePage()),
+            OffStage(isActive: _currentTabEnum == MainPageTabsEnum.home, child: HomePage()),
             OffStage(
-              isActive: _currentTabEnum == ClientMainPageTabsEnum.orders,
+              isActive: _currentTabEnum == MainPageTabsEnum.orders,
               child: const GuestCheckerWidget(replaceWithDefaultGuestWidget: true, child: SizedBox()),
             ),
             OffStage(
-              isActive: _currentTabEnum == ClientMainPageTabsEnum.cart,
+              isActive: _currentTabEnum == MainPageTabsEnum.cart,
               child: const GuestCheckerWidget(replaceWithDefaultGuestWidget: true, child: SizedBox()),
             ),
-            OffStage(isActive: _currentTabEnum == ClientMainPageTabsEnum.more, child: const MorePage()),
+            OffStage(isActive: _currentTabEnum == MainPageTabsEnum.more, child: const MorePage()),
           ],
         ),
       ),

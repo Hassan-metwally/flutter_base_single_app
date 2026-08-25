@@ -41,7 +41,7 @@ class _UpdatePhonePageState extends State<UpdatePhonePage> {
     final phoneNumber = _phoneController.text.trim();
     if (phoneNumber.isEmpty) return;
     if (isValidForm) {
-      final params = CanUpdatePhoneParams(phone: _phoneController.text.trim());
+      final params = CanUpdatePhoneParams(countryCode: "+966", phone: _phoneController.text.trim());
       context.read<UpdatePhoneCubit>().canUpdate(params);
     }
   }

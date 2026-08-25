@@ -89,7 +89,7 @@ class _LoggedClientCard extends StatelessWidget {
             ),
             OutlinedButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(AppRoutes.clientPersonalProfile);
+                Navigator.of(context).pushNamed(AppRoutes.personalProfile);
               },
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(80, 40),

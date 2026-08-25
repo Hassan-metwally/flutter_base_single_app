@@ -1,6 +1,6 @@
 import '../../../core/core.dart';
 
-enum ClientMainPageTabsEnum {
+enum MainPageTabsEnum {
   home,
   orders,
   cart,
@@ -8,39 +8,39 @@ enum ClientMainPageTabsEnum {
 
   String get filledIc {
     switch (this) {
-      case ClientMainPageTabsEnum.home:
+      case MainPageTabsEnum.home:
         return "";
-      case ClientMainPageTabsEnum.orders:
+      case MainPageTabsEnum.orders:
         return "";
-      case ClientMainPageTabsEnum.cart:
+      case MainPageTabsEnum.cart:
         return "";
-      case ClientMainPageTabsEnum.more:
+      case MainPageTabsEnum.more:
         return "";
     }
   }
 
   String get outlineIc {
     switch (this) {
-      case ClientMainPageTabsEnum.home:
+      case MainPageTabsEnum.home:
         return "";
-      case ClientMainPageTabsEnum.orders:
+      case MainPageTabsEnum.orders:
         return "";
-      case ClientMainPageTabsEnum.cart:
+      case MainPageTabsEnum.cart:
         return "";
-      case ClientMainPageTabsEnum.more:
+      case MainPageTabsEnum.more:
         return "";
     }
   }
 
   String get title {
     switch (this) {
-      case ClientMainPageTabsEnum.home:
+      case MainPageTabsEnum.home:
         return appLocalizer.home;
-      case ClientMainPageTabsEnum.orders:
+      case MainPageTabsEnum.orders:
         return appLocalizer.orders;
-      case ClientMainPageTabsEnum.cart:
+      case MainPageTabsEnum.cart:
         return appLocalizer.cart;
-      case ClientMainPageTabsEnum.more:
+      case MainPageTabsEnum.more:
         return appLocalizer.more;
     }
   }

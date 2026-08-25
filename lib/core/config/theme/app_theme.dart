@@ -87,7 +87,7 @@ abstract class AppTheme {
   final Color secondary800 = const Color(0xff553D11);
   final Color secondary900 = const Color(0xff2B1F08);
 
-    Color get black => black900;
+  Color get black => black900;
   final Color black50 = const Color(0xFFF2F2F2);
   final Color black100 = const Color(0xFFE8E8E8);
   final Color black200 = const Color(0xFFCFCFCF);

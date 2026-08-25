@@ -14,7 +14,7 @@ import 'core/di/di.dart';
 import 'src/authentication/presentation/login/login_page.dart';
 import 'src/authentication/presentation/login/login_cubit.dart';
 import 'src/common/presentation/splash/splash_page.dart';
-import 'src/main_page/client_main_page.dart';
+import 'src/main_page/main_page.dart';
 import 'src/onboarding/onboarding_page.dart';
 
 class App extends StatelessWidget {
@@ -95,7 +95,7 @@ class AppBuilderScreen extends StatelessWidget {
         } else if (state is AuthLogInPageState || state is AuthLogOutState) {
           root = BlocProvider(create: (context) => LoginCubit(), child: const LoginPage());
         } else {
-          root = const ClientMainPage();
+          root = const MainPage();
         }
 
         return Material(

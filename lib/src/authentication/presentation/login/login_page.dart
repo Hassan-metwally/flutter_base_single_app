@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onRegisterPressed() {
-    Navigator.of(context).pushNamed(AppRoutes.clientRegisterPage);
+    Navigator.of(context).pushNamed(AppRoutes.registerPage);
   }
 
   void _onLoginSuccess({required UserEntity user}) {

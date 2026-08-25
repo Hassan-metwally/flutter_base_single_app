@@ -13,13 +13,13 @@ import '../../../../material/spin_kit_loading_widget.dart';
 import '../../../../material/toast/app_toast.dart';
 import '../../../authentication/presentation/update_phone/update_phone_page.dart';
 import '../../../common/domain/entity/users/client_entity.dart';
-import '../../../main_page/models/client_main_page_tabs_enum.dart';
-import '../../../main_page/observer/client_main_page_observer.dart';
+import '../../../main_page/models/main_page_tabs_enum.dart';
+import '../../../main_page/observer/main_page_observer.dart';
 import '../../domain/use_cases/update_profile_use_case.dart';
 import 'personal_profile_cubit.dart';
 
-class ClientPersonalProfilePage extends StatelessWidget {
-  const ClientPersonalProfilePage({super.key});
+class PersonalProfilePage extends StatelessWidget {
+  const PersonalProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class ClientPersonalProfilePage extends StatelessWidget {
           ),
         ),
       ),
-      body: BlocSelector<ClientPersonalProfileCubit, ClientPersonalProfileState, Async<ClientEntity>>(
+      body: BlocSelector<PersonalProfileCubit, PersonalProfileState, Async<ClientEntity>>(
         selector: (state) {
           return state.getDataState;
         },
@@ -46,7 +46,7 @@ class ClientPersonalProfilePage extends StatelessWidget {
           } else if (state.isLoading) {
             return const SpinKitLoadingWidget();
           } else if (state.isFailure) {
-            return AppFailWidget(onRetry: context.read<ClientPersonalProfileCubit>().getData);
+            return AppFailWidget(onRetry: context.read<PersonalProfileCubit>().getData);
           }
           return const SizedBox();
         },
@@ -73,7 +73,7 @@ class __PageBodyState extends State<_PageBody> {
     final isValidForm = formKey.currentState?.validate() ?? false;
     if (isValidForm) {
       final params = UpdateProfileParams(image: _avatorController.value, name: _nameController.text);
-      context.read<ClientPersonalProfileCubit>().updateProfile(params);
+      context.read<PersonalProfileCubit>().updateProfile(params);
     }
   }
 
@@ -81,7 +81,7 @@ class __PageBodyState extends State<_PageBody> {
     AppToasts.success(context, message: appLocalizer.personalProfileUpdateSuccessMessage);
     AppAuthenticationBloc.of(context).add(const AuthenticatedEvent());
     await Future.delayed(const Duration(milliseconds: 1500), () {
-      ClientMainPageUpdater.notifyOnChangedCallbacks(ClientMainPageTabsEnum.more);
+      MainPageUpdater.notifyOnChangedCallbacks(MainPageTabsEnum.more);
       if (mounted) {
         Navigator.of(context).popUntil((route) => route.isFirst);
       }
@@ -97,7 +97,7 @@ class __PageBodyState extends State<_PageBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ClientPersonalProfileCubit, ClientPersonalProfileState>(
+    return BlocListener<PersonalProfileCubit, PersonalProfileState>(
       listener: (context, state) {
         if (state.updateDataState.isSuccess) {
           AppLoadingWidget.removeOverlay();

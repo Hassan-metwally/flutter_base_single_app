@@ -10,10 +10,10 @@ import '../../domain/use_cases/update_profile_use_case.dart';
 part 'personal_profile_state.dart';
 
 @Injectable()
-class ClientPersonalProfileCubit extends Cubit<ClientPersonalProfileState> with SafeEmitMixin {
+class PersonalProfileCubit extends Cubit<PersonalProfileState> with SafeEmitMixin {
   final GetProfileUseCase _getClientDataUseCase;
   final UpdateProfileUseCase _updateClientDataUseCase;
-  ClientPersonalProfileCubit(this._getClientDataUseCase, this._updateClientDataUseCase) : super(const ClientPersonalProfileState.initial());
+  PersonalProfileCubit(this._getClientDataUseCase, this._updateClientDataUseCase) : super(const PersonalProfileState.initial());
 
   void getData() async {
     emit(state.copyWith(getDataState: const Async.loading()));
@@ -43,7 +43,7 @@ class ClientPersonalProfileCubit extends Cubit<ClientPersonalProfileState> with 
   }
 
   @override
-  void emit(ClientPersonalProfileState state) {
+  void emit(PersonalProfileState state) {
     if (!isClosed) {
       super.emit(state);
     }

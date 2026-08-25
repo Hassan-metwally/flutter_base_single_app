@@ -1,10 +1,10 @@
-part of '../client_main_page.dart';
+part of '../main_page.dart';
 
 class _ClientBottomNavigationBar extends StatelessWidget {
   const _ClientBottomNavigationBar({required this.selctedTab, required this.onTabChanged});
 
-  final ClientMainPageTabsEnum selctedTab;
-  final ValueChanged<ClientMainPageTabsEnum> onTabChanged;
+  final MainPageTabsEnum selctedTab;
+  final ValueChanged<MainPageTabsEnum> onTabChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class _ClientBottomNavigationBar extends StatelessWidget {
         boxShadow: [BoxShadow(color: AppColors.black.withOpacityPercent(8), blurRadius: 4)],
       ),
       child: Row(
-        children: ClientMainPageTabsEnum.values.map((item) {
+        children: MainPageTabsEnum.values.map((item) {
           final bool isSelected = item == selctedTab;
           return Expanded(
             child: Bounce(
