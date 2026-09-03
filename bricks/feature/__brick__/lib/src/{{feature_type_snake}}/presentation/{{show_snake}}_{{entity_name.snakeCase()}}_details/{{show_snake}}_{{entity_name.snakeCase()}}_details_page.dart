@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../../../../core/core.dart';
@@ -81,12 +82,20 @@ class _{{show_pascal}}{{entity_name.pascalCase()}}DetailsBodyState extends State
             return Column(
               children: [
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0).copyWith(bottom: 0),
-                    child: const SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 16,
+                  child: LiquidPullToRefresh(
+                    color: AppColors.backgroundColor,
+                    backgroundColor: AppColors.primary,
+                    onRefresh: () {
+                      return context.read<{{show_pascal}}{{entity_name.pascalCase()}}DetailsCubit>().{{show_camel}}{{entity_name.pascalCase()}}Details(widget.id);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0).copyWith(bottom: 0),
+                      child: const SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: 16,
+                        ),
                       ),
                     ),
                   ),

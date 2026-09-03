@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../../core/core.dart';
 import '../../../../../../../material/app_fail_widget.dart';
+import '../../../../../../../material/auth_states/guest_bottom_sheet.dart';
+import '../../../../../../../material/auth_states/guest_checker_widget.dart';
 import '../../../../../../../material/media/app_image.dart';
 import '../../../../../../../material/shimmer/shimmer_effect_widget.dart';
 import '../../../domain/entities/ad_entity.dart';
@@ -95,15 +97,39 @@ class _AdsBannerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppImage.rounded(
-      path: ad.image.path,
-      height: _kBannerHeight,
-      width: double.infinity,
-      radius: _kBannerRadius,
-      bgColor: AppColors.black800,
-      fit: BoxFit.cover,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: ad.canOpen ? () => _openAd(context, ad) : null,
+      child: AppImage.rounded(
+        path: ad.image.path,
+        height: _kBannerHeight,
+        width: double.infinity,
+        radius: _kBannerRadius,
+        bgColor: AppColors.black800,
+        fit: BoxFit.cover,
+      ),
     );
   }
+}
+
+void _openAd(BuildContext context, AdEntity ad) {
+  GuestCheckerWidget.check(
+    context,
+    caseGuest: () => GuestBottomSheet.show(context),
+    elseCase: () {
+      switch (ad.type) {
+        case AdType.external:
+          final String? url = ad.externalUrl?.trim();
+          if (url == null || url.isEmpty) {
+            return;
+          }
+          LaunchUrlUtils.openUrl(url: url);
+        case AdType.none:
+        case AdType.unknown:
+          return;
+      }
+    },
+  );
 }
 
 class _AdsPageIndicator extends StatelessWidget {

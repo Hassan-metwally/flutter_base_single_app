@@ -17,9 +17,9 @@ class AdsDatasourceImpl extends AdsDatasource {
   @override
   Future<List<ApiAdModel>> getAllAds(NoParams params) async {
     try {
-      final response = await _dioHelper.get(url: ApiConstants.addToApiUrlPath("banners"), queryParameters: {'page': 0, 'limit': 0});
+      final response = await _dioHelper.get(url: ApiConstants.addToApiUrlPath("ads"));
       final rawList = (response['data'] as List<dynamic>? ?? const <dynamic>[]);
-      final List<ApiAdModel> data = rawList.map((e) => ApiAdModel.fromJson(e)).toList();
+      final List<ApiAdModel> data = rawList.map((e) => ApiAdModel.fromJson(e as Map<String, dynamic>)).toList();
       return data;
     } catch (_) {
       rethrow;
