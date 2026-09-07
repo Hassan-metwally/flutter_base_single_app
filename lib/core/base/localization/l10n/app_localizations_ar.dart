@@ -15,7 +15,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get languageName => 'العربية';
 
   @override
-  String get appName => 'أزهمنى';
+  String get appName => 'Azhimny';
 
   @override
   String get unexpectedError => 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.';

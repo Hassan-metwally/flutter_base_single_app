@@ -1,4 +1,4 @@
-package com.example.azhimny
+package com.moltaqa.azhimny
 
 import io.flutter.embedding.android.FlutterActivity
 
