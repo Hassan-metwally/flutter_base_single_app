@@ -17,7 +17,7 @@ import '../domain/entities/address_entity.dart';
 import '../domain/use_cases/google_maps_api/get_location_address_use_case.dart';
 import 'maps_main_cubit.dart';
 import 'maps_main_state.dart';
-import 'widgets/main_page_app_bar.dart';
+import 'widgets/maps_app_bar_widget.dart';
 
 part 'widgets/only_preview_widgets.dart';
 part "widgets/selectable_map_widgets.dart";
