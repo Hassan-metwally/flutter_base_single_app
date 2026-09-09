@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'core/di/di.dart';
-import 'core/utils/pusher/pusher_handler.dart';
 import 'src/notifications/helpers/firebase/firebase_helper.dart';
 
 Future<void> initializeAppConfig() async {
@@ -17,9 +16,6 @@ Future<void> initializeAppConfig() async {
 
   // Initialize Firebase services.
   await FirebaseHelper.init();
-
-  // Initialize the Pusher.
-  await PusherHandler.instance.initialize();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
 

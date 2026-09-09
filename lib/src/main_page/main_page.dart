@@ -53,10 +53,15 @@ class _MainPageState extends State<MainPage> with MainPageObserverMixin {
 
   @override
   void initState() {
+    super.initState();
     FirebaseHelper.setUpNotificationListener();
     initObserver(onTabChanged: _onCurrentTapChanged);
     _addUnAuthenticatedListener();
-    super.initState();
+    // if (!GuestCheckerWidget.isGuest(context)) {
+    //   PusherHandler.instance.initialize();
+    // }
+    
+    
     // _getUnReadNotificationsCount();
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   DeepLinksUtils.intit();

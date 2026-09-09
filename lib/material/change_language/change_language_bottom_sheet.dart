@@ -1,10 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/core.dart';
 import '../media/svg_icon.dart';
 import '../overlay/show_modal_bottom_sheet.dart';
+import '../toast/app_toast.dart';
+import 'change_language_cubit.dart';
 
 class ChangeLanguageBottomSheet extends StatefulWidget {
   const ChangeLanguageBottomSheet._();
@@ -13,7 +16,13 @@ class ChangeLanguageBottomSheet extends StatefulWidget {
   State<ChangeLanguageBottomSheet> createState() => _ChangeLanguageBottomSheetState();
 
   static void show(BuildContext context) async {
-    return await showAppModalBottomSheet(child: const ChangeLanguageBottomSheet._(), context: context);
+    return await showAppModalBottomSheet(
+      child: BlocProvider(
+        create: (_) => ChangeLanguageCubit(),
+        child: const ChangeLanguageBottomSheet._(),
+      ),
+      context: context,
+    );
   }
 }
 
@@ -22,6 +31,8 @@ class _ChangeLanguageBottomSheetState extends State<ChangeLanguageBottomSheet> {
 
   AppLanguageEnum get savedLanguage => AppLanguageCubit.of(context).state.langCode;
 
+  bool get _isAuthenticated => AppAuthenticationBloc.of(context).state is AuthAuthenticatedState;
+
   @override
   void initState() {
     currentLang = savedLanguage;
@@ -29,41 +40,69 @@ class _ChangeLanguageBottomSheetState extends State<ChangeLanguageBottomSheet> {
   }
 
   void _onLanguageChange(AppLanguageEnum? selectedLang) {
-    currentLang = (selectedLang ?? AppLanguageEnum.en);
+    if (context.read<ChangeLanguageCubit>().state.isLoading) {
+      return;
+    }
+    setState(() {
+      currentLang = (selectedLang ?? AppLanguageEnum.en);
+    });
     _onSaveLanguage();
   }
 
-  void _onSaveLanguage() async {
-    if (savedLanguage != currentLang) {
+  Future<void> _applyLocalLanguageChange() async {
+    final bool didChange = savedLanguage != currentLang;
+    if (didChange) {
       await AppLanguageCubit.of(context).changeLanguage(currentLang);
     }
     if (mounted) {
       Navigator.of(context).popUntil((route) => route.isFirst);
     }
-    if (mounted && savedLanguage != currentLang) {
-      AppAuthenticationBloc.of(context).add(const AuthRestartEvent());
+  }
+
+  void _onSaveLanguage() async {
+    if (savedLanguage == currentLang) {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+      return;
     }
+
+    if (_isAuthenticated) {
+      context.read<ChangeLanguageCubit>().changeLanguage(currentLang);
+      return;
+    }
+
+    await _applyLocalLanguageChange();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        AppSvgIcon(path: ""),
-        const SizedBox(height: 24),
-        Text(appLocalizer.changeLanguage, style: TextStyles.bold16),
-        const SizedBox(height: 24),
-        _Tile(
-          isSeleted: currentLang == AppLanguageEnum.ar,
-          icon: "",
-          onTap: () => _onLanguageChange(AppLanguageEnum.ar),
-          title: "اللغة العربية",
-        ),
-        Divider(color: AppColors.black50, height: 7),
-        _Tile(isSeleted: currentLang == AppLanguageEnum.en, icon: "", onTap: () => _onLanguageChange(AppLanguageEnum.en), title: "English"),
-        const SizedBox(height: 16),
-      ],
+    return BlocListener<ChangeLanguageCubit, ChangeLanguageState>(
+      listener: (context, state) async {
+        if (state.isSuccess) {
+          await _applyLocalLanguageChange();
+        } else if (state.isFailure) {
+          AppToasts.error(context, message: state.errorMessage ?? '');
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          AppSvgIcon(path: ""),
+          const SizedBox(height: 24),
+          Text(appLocalizer.changeLanguage, style: TextStyles.bold16),
+          const SizedBox(height: 24),
+          _Tile(
+            isSeleted: currentLang == AppLanguageEnum.ar,
+            icon: "",
+            onTap: () => _onLanguageChange(AppLanguageEnum.ar),
+            title: "اللغة العربية",
+          ),
+          Divider(color: AppColors.black50, height: 7),
+          _Tile(isSeleted: currentLang == AppLanguageEnum.en, icon: "", onTap: () => _onLanguageChange(AppLanguageEnum.en), title: "English"),
+          const SizedBox(height: 16),
+        ],
+      ),
     );
   }
 }

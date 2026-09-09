@@ -20,7 +20,7 @@ class CommonDatasourceImpl extends CommonDatasource {
   @override
   Future<void> changeLanguage(AppLanguageEnum lang) async {
     try {
-      await _dioHelper.post(url: 'auth/change-language', body: {'language': lang.value});
+      await _dioHelper.put(url: ApiConstants.addToApiUrlPath('profile/locale'), body: {'locale': lang.value});
     } catch (_) {
       rethrow;
     }
