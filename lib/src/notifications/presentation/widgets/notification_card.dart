@@ -79,11 +79,10 @@ class _NotificationCardState extends State<_NotificationCard> {
                     children: [
                       Text(widget.notification.title, style: TextStyles.medium12, maxLines: 2),
                       const SizedBox(height: 4),
-                      Text(
-                        widget.notification.body,
-                        style: TextStyles.regular10.copyWith(color: AppColors.black600),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
+                      ReadMoreText(
+                        text: widget.notification.body,
+                        trimLength: 73,
+                        style: TextStyles.regular12.copyWith(color: AppColors.black600, height: 1.55),
                       ),
                     ],
                   ),

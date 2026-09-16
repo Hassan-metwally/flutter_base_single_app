@@ -8,6 +8,7 @@ import '../../../core/di/di.dart';
 import '../../../material/app_empty_widget.dart';
 import '../../../material/app_fail_widget.dart';
 import '../../../material/media/app_image.dart';
+import '../../../material/read_more.dart';
 import '../../../material/spin_kit_loading_widget.dart';
 import '../../chat/domain/entities/chat_page_input.dart';
 import '../../chat/presentation/chat_page.dart';
