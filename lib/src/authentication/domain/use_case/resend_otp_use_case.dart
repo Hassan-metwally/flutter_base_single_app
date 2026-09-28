@@ -28,7 +28,5 @@ class ResendOtpParams extends NoParams {
     "purpose": verifyCase.value,
     "country_code": countryCode,
     "phone": phone,
-    "fcm_token": "test_tokentest_tokentest_tokentest_tokentest_tokentest_tokentest_tokentest_tokentest_token",
-    // "fcm_token": await FirebaseHelper.getDeviceFcmToken(),
   };
 }

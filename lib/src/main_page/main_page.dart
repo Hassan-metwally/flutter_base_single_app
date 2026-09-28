@@ -57,24 +57,17 @@ class _MainPageState extends State<MainPage> with MainPageObserverMixin {
     FirebaseHelper.setUpNotificationListener();
     initObserver(onTabChanged: _onCurrentTapChanged);
     _addUnAuthenticatedListener();
+
+    // // Pusher Initialize
     // if (!GuestCheckerWidget.isGuest(context)) {
     //   PusherHandler.instance.initialize();
     // }
-    
-    
-    // _getUnReadNotificationsCount();
+
+    // // Deep Links Initialize
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   DeepLinksUtils.intit();
     // });
   }
-
-  // void _getUnReadNotificationsCount() {
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     if (AppAuthenticationBloc.of(context).state is AuthAuthenticatedState) {
-  //       context.read<NotificationsCubit>().getUnreadNotificationCount();
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
