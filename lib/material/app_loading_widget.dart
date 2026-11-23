@@ -43,7 +43,7 @@ class AppLoadingWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [AppColors.boxShadow],
               ),
-              child: const LogoLoading(),
+              child: const AppLoadingWidget(),
             ),
           ),
         );

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:chewie/chewie.dart';
@@ -25,9 +26,10 @@ class FullVideoPlayerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
-          Center(child: VideoViewWidget(input: input, isCurrent: true, showProgress: true)),
+          Positioned.fill(child: VideoViewWidget(input: input, isCurrent: true, showProgress: true)),
           PositionedDirectional(
             top: 10,
             start: 20,
@@ -129,8 +131,8 @@ class _VideoViewWidgetState extends State<VideoViewWidget> {
             _chewieController != null) {
           return GestureDetector(
             onTap: widget.onVideoClicked,
-            child: AspectRatio(
-              aspectRatio: _chewieController?.aspectRatio ?? 16 / 9,
+            child: ColoredBox(
+              color: Colors.black,
               child: Theme(
                 data: ThemeData(progressIndicatorTheme: ProgressIndicatorThemeData(color: AppColors.secondary)),
                 child: Chewie(controller: _chewieController!),
@@ -171,7 +173,7 @@ class _VideoViewWidgetState extends State<VideoViewWidget> {
   }
 }
 
-class _CustomControls extends StatelessWidget {
+class _CustomControls extends StatefulWidget {
   final bool isMuted;
   final VoidCallback onPlayPause;
   final VoidCallback onMuteUnMute;
@@ -187,60 +189,227 @@ class _CustomControls extends StatelessWidget {
   });
 
   @override
+  State<_CustomControls> createState() => _CustomControlsState();
+}
+
+class _CustomControlsState extends State<_CustomControls> {
+  static const Duration _seekStep = Duration(seconds: 10);
+  static const Duration _autoHideDelay = Duration(seconds: 3);
+  static const Duration _fadeDuration = Duration(milliseconds: 250);
+  static const double _buttonRadius = 22;
+  static const double _primaryButtonRadius = 30;
+
+  Timer? _hideTimer;
+  bool _isVisible = true;
+  bool _isDragging = false;
+  bool _wasPlaying = false;
+  double _dragValueMs = 0;
+
+  VideoPlayerController get _controller => widget.videoPlayerController;
+
+  @override
+  void initState() {
+    super.initState();
+    _wasPlaying = _controller.value.isPlaying;
+    _controller.addListener(_onVideoValueChanged);
+    _scheduleHide();
+  }
+
+  @override
+  void dispose() {
+    _hideTimer?.cancel();
+    _controller.removeListener(_onVideoValueChanged);
+    super.dispose();
+  }
+
+  void _onVideoValueChanged() {
+    final bool isPlaying = _controller.value.isPlaying;
+    if (isPlaying == _wasPlaying) return;
+    _wasPlaying = isPlaying;
+    if (isPlaying) {
+      _scheduleHide();
+    } else {
+      _showControls();
+    }
+  }
+
+  void _showControls() {
+    _hideTimer?.cancel();
+    if (!_isVisible && mounted) setState(() => _isVisible = true);
+  }
+
+  void _scheduleHide() {
+    _hideTimer?.cancel();
+    if (!_controller.value.isPlaying || _isDragging) return;
+    _hideTimer = Timer(_autoHideDelay, () {
+      if (mounted) setState(() => _isVisible = false);
+    });
+  }
+
+  void _toggleControls() {
+    if (_isVisible) {
+      _hideTimer?.cancel();
+      setState(() => _isVisible = false);
+    } else {
+      setState(() => _isVisible = true);
+      _scheduleHide();
+    }
+  }
+
+  void _onAction(VoidCallback action) {
+    action();
+    _scheduleHide();
+  }
+
+  Future<void> _seekBy(Duration offset) async {
+    final VideoPlayerValue value = _controller.value;
+    if (!value.isInitialized || value.duration <= Duration.zero) return;
+    final Duration target = value.position + offset;
+    final Duration clamped = target < Duration.zero ? Duration.zero : (target > value.duration ? value.duration : target);
+    await _controller.seekTo(clamped);
+  }
+
+  String _formatDuration(Duration duration) {
+    final int totalSeconds = duration.inSeconds.clamp(0, 359999);
+    final int hours = totalSeconds ~/ 3600;
+    final int minutes = (totalSeconds % 3600) ~/ 60;
+    final int seconds = totalSeconds % 60;
+    final String minutesPart = minutes.toString().padLeft(2, '0');
+    final String secondsPart = seconds.toString().padLeft(2, '0');
+    if (hours > 0) return '$hours:$minutesPart:$secondsPart';
+    return '$minutesPart:$secondsPart';
+  }
+
+  Widget _controlButton({required IconData icon, required VoidCallback onTap, double radius = _buttonRadius}) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _onAction(onTap),
+      child: CircleAvatar(
+        radius: radius,
+        backgroundColor: Colors.white.withOpacityPercent(20),
+        child: Icon(icon, size: radius * 0.9, color: AppColors.white),
+      ),
+    );
+  }
+
+  Widget _buildSeekBar(VideoPlayerValue value) {
+    final double maxMs = value.duration.inMilliseconds > 0 ? value.duration.inMilliseconds.toDouble() : 1;
+    final double positionMs = (_isDragging ? _dragValueMs : value.position.inMilliseconds.toDouble()).clamp(0, maxMs);
+    final TextStyle timeStyle = TextStyles.regular12.copyWith(color: AppColors.white);
+
+    return Row(
+      children: [
+        Text(_formatDuration(Duration(milliseconds: positionMs.round())), style: timeStyle),
+        Expanded(
+          child: SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              trackHeight: 3,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
+              activeTrackColor: AppColors.secondary,
+              inactiveTrackColor: Colors.white.withOpacityPercent(30),
+              thumbColor: Colors.white,
+              overlayColor: AppColors.secondary.withOpacityPercent(25),
+            ),
+            child: Slider(
+              value: positionMs,
+              max: maxMs,
+              onChangeStart: (newValue) {
+                _hideTimer?.cancel();
+                setState(() {
+                  _isDragging = true;
+                  _dragValueMs = newValue;
+                });
+              },
+              onChanged: (newValue) => setState(() => _dragValueMs = newValue),
+              onChangeEnd: (newValue) async {
+                await _controller.seekTo(Duration(milliseconds: newValue.round()));
+                if (!mounted) return;
+                setState(() {
+                  _isDragging = false;
+                  _dragValueMs = newValue;
+                });
+                _scheduleHide();
+              },
+            ),
+          ),
+        ),
+        Text(_formatDuration(value.duration), style: timeStyle),
+      ],
+    );
+  }
+
+  Widget _buildButtonsRow(VideoPlayerValue value) {
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
+
+    return Row(
+      children: [
+        Expanded(
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: _controlButton(icon: value.volume == 0 ? Iconsax.volume_slash : Iconsax.volume_high, onTap: widget.onMuteUnMute),
+          ),
+        ),
+        _controlButton(
+          icon: isRtl ? Iconsax.forward_10_seconds : Iconsax.backward_10_seconds,
+          onTap: () => _seekBy(-_seekStep),
+        ),
+        const SizedBox(width: 20),
+        _controlButton(icon: value.isPlaying ? Iconsax.pause : Iconsax.play, onTap: widget.onPlayPause, radius: _primaryButtonRadius),
+        const SizedBox(width: 20),
+        _controlButton(
+          icon: isRtl ? Iconsax.backward_10_seconds : Iconsax.forward_10_seconds,
+          onTap: () => _seekBy(_seekStep),
+        ),
+        const Expanded(child: SizedBox.shrink()),
+      ],
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: videoPlayerController,
+    return ValueListenableBuilder<VideoPlayerValue>(
+      valueListenable: _controller,
       builder: (context, value, child) {
         if (!value.isInitialized) return const SizedBox.shrink();
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: onPlayPause,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.grey.withOpacityPercent(40),
-                      child: Icon(value.isPlaying ? Iconsax.pause : Iconsax.play, size: 20.0, color: AppColors.white),
+
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: _toggleControls,
+          child: SizedBox.expand(
+            child: AnimatedOpacity(
+              opacity: _isVisible ? 1 : 0,
+              duration: _fadeDuration,
+              child: IgnorePointer(
+                ignoring: !_isVisible,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [Colors.black.withOpacityPercent(80), Colors.transparent],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: GestureDetector(
-                      onTap: onMuteUnMute,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.grey.withOpacityPercent(40),
-                        child: Icon(value.volume == 0 ? Iconsax.volume_slash : Iconsax.volume_high, size: 20.0, color: AppColors.white),
+                    child: SafeArea(
+                      top: false,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 32, 16, 12),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (widget.showProgress) ...[_buildSeekBar(value), const SizedBox(height: 8)],
+                            _buildButtonsRow(value),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-            if (showProgress)
-              SliderTheme(
-                data: SliderThemeData(
-                  overlayShape: SliderComponentShape.noOverlay,
-                  thumbShape: SliderComponentShape.noThumb,
-                  trackHeight: 1,
-                  minThumbSeparation: 0,
-                ),
-                child: Slider(
-                  value: value.position.inMilliseconds.toDouble(),
-                  onChanged: (value) {
-                    videoPlayerController.seekTo(Duration(milliseconds: value.toInt()));
-                  },
-                  activeColor: AppColors.secondary,
-                  thumbColor: Colors.white,
-                  inactiveColor: AppColors.blue100,
-                  max: value.duration.inMilliseconds.toDouble(),
-                ),
-              ),
-          ],
+          ),
         );
       },
     );

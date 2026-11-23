@@ -59,7 +59,7 @@ class RegisterParams extends Equatable {
     return {
       "avatar": MultipartFile.fromFileSync(avatar.path),
       "name": name,
-      "mobile": (phone.isNotEmpty && !phone.startsWith('0')) ? '0$phone' : phone,
+      "phone": (phone.isNotEmpty && !phone.startsWith('0')) ? '0$phone' : phone,
       "city_id": city.id,
       "service_id": service.id,
       "commercial_register_number": commercialRegistrationNumber,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/core.dart';
+import '../../../material/app_empty_widget.dart';
 import '../../../material/app_fail_widget.dart';
 import '../../../material/media/app_image.dart';
 import '../domain/entities/message_auther.dart';
@@ -21,7 +22,10 @@ class ChatBodyWidget extends StatelessWidget {
       },
       builder: (context, state) {
         final List<ChatMessageHandler> messagesList = state.data ?? [];
-        if (state.isSuccess && messagesList.isNotEmpty) {
+        if (state.isSuccess) {
+          if (messagesList.isEmpty) {
+            return const AppEmptyWidget(heightPercentage: 0.6);
+          }
           final sortedMessages = messagesList..sort((a, b) => a.message.createdAt.compareTo(b.message.createdAt));
           return ListView.separated(
             reverse: true,
