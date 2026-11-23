@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -26,6 +27,10 @@ class PusherHandler {
   /// Initialize and connect to Pusher Channels
   ///
   Future<void> initialize() async {
+    if (_isConnected) {
+      _debugPrint("Pusher already initialized");
+      return;
+    }
     try {
       _debugPrint("Start initializing Pusher");
       await _pusher.init(
@@ -52,7 +57,7 @@ class PusherHandler {
       final token = await _getTokenUseCase();
       if (token == null) {
         _debugPrint("Authorizer error: Token is null");
-        return {};
+        return null;
       }
 
       _debugPrint("Authorizing channel: $channelName");
@@ -68,14 +73,30 @@ class PusherHandler {
         ),
       ).post(_authBroadcastingUrl, data: {'socket_id': socketId, 'channel_name': channelName});
 
-      _debugPrint("Authorizer success: ${result.data}");
-      return result.data;
+      final data = result.data;
+      final Object? decoded = switch (data) {
+        String() when data.isNotEmpty => jsonDecode(data),
+        _ => data,
+      };
+      // iOS force-casts a non-null result to [String: String] and force-unwraps "auth";
+      // null is the only failure value both native sides handle without crashing.
+      if (decoded is! Map || decoded['auth'] is! String) {
+        _debugPrint("Authorizer invalid response: $data");
+        return null;
+      }
+      final auth = <String, String>{
+        for (final entry in decoded.entries)
+          if (entry.value is String) entry.key.toString(): entry.value as String,
+      };
+
+      _debugPrint("Authorizer success: $auth");
+      return auth;
     } catch (e) {
       _debugPrint("Authorizer error: $e");
       if (e is DioException) {
         _debugPrint("Dio error data: ${e.response?.data}");
       }
-      return {}; // Returning an empty map prevents the native side from receiving a FlutterError and crashing
+      return null;
     }
   }
 
@@ -88,6 +109,7 @@ class PusherHandler {
   static Future<PusherChannel?> subscribeToChannel({
     required String channelName,
     required Function(PusherEvent event) onEvent,
+    String? eventName,
     Function(String error)? onSubscriptionError,
     Function(dynamic data)? onSubscriptionSucceeded,
   }) async {
@@ -108,9 +130,9 @@ class PusherHandler {
           onSubscriptionSucceeded?.call(data);
         },
         onEvent: (event) {
-          if (event is PusherEvent) {
-            onEvent(event);
-          }
+          if (event is! PusherEvent) return;
+          if (eventName != null && event.eventName != eventName) return;
+          onEvent(event);
         },
       );
       return channel;

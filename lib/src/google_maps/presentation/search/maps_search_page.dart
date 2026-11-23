@@ -11,7 +11,7 @@ import '../../domain/entities/address_entity.dart';
 import '../../domain/entities/place_suggestion_entity.dart';
 import 'maps_search_cubit.dart';
 
-part "../widgets/search_app_bar_widget.dart";
+part "../widgets/maps_search_app_bar_widget.dart";
 
 class MapsSearchPage extends StatelessWidget {
   const MapsSearchPage({super.key, this.initialAddress});
